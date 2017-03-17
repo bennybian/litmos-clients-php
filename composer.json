@@ -1,13 +1,13 @@
 {
-  "name": "tldev/litmos-php",
+  "name": "bennybian/litmos-clients-php",
   "description": "Litmos API abstraction for PHP",
   "require": {
     "php": ">=5.3.0"
   },
   "authors": [
     {
-      "name": "Tom Johnell",
-      "email": "tjohnell@gmail.com"
+      "name": "Benny",
+      "email": ""
     }
   ],
   "autoload": {
