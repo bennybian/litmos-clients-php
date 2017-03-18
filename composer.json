@@ -9,6 +9,7 @@
       "name":"Tom Johnell",
       "email": "tjohnell@gmail.com"
     }
+    ],
   "autoload": {
     "psr-4": {
       "Litmos\\": "src/Litmos"
