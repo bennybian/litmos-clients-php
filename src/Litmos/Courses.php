@@ -9,6 +9,8 @@ class Courses
      * @var Service
      */
     private $service;
+	
+	
 
     /**
      * @param Service $litmos_service
@@ -22,14 +24,44 @@ class Courses
      * @param PagingSearch $ps
      *
      * @return Course[]
+	 
+	  [2] =>
+	  Array
+        (
+            [Id] => jVAm87NAzjE1
+            [Code] => CCCC001
+            [Name] => Test Course
+            [Active] => true
+            [ForSale] => false
+            [OriginalId] => 199342
+            [Description] => This is testing putting in a course description
+            [EcommerceShortDescription] => 
+            [EcommerceLongDescription] => 
+            [CourseCodeForBulkImport] => 199342-CCCC001
+            [Price] => 0.00
+            [AccessTillDate] => 
+            [AccessTillDays] => 
+        )
+		
+	 
      */
     public function getAll(PagingSearch $ps = null)
     {
         $response = $this->service->get('/courses', $ps);
-
+       //var_dump($response);
         $xml = new \SimpleXMLElement($response);
-
-        $courses      = array();
+		
+		$course_nodes = $xml->children();
+		foreach ($course_nodes as $element) {
+		  $oneCourse=array();
+		  foreach($element as $key => $val) {
+		   $oneCourse[$key] =(string)$val;
+		  }
+		
+		  $courses[]=$oneCourse;
+		}
+		
+      /*  $courses      = array();
         $course_nodes = $xml->children();
 
         foreach ($course_nodes as $course_node) {
@@ -40,7 +72,7 @@ class Courses
 
             $course    = new Course($id, $code, $name, $active);
             $courses[] = $course;
-        }
+        }*/
 
         return $courses;
     }

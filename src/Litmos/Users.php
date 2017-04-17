@@ -33,7 +33,7 @@ class Users
         foreach ($users_nodes as $user_node) {
             $id         = (string)$user_node->Id;
             $username   = (string)$user_node->UserName;
-            $first_name = (string)$user_node->FirstName;
+            echo $first_name = (string)$user_node->FirstName;
             $last_name  = (string)$user_node->LastName;
             $users[]    = new UserBasic($this->service, $id, $username, $first_name, $last_name);
         }

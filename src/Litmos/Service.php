@@ -164,7 +164,8 @@ class Service
                 sprintf('Bad response received from Litmos! http status: %s url: %s', $http_status, $full_url)
             );
         }
-
+	
+  
         return $output;
     }
 
@@ -211,7 +212,7 @@ class Service
         }
 
         $url = $base_url . '?' . http_build_query($query_params);
-
+      
         return $url;
     }
 
