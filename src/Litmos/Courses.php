@@ -25,7 +25,7 @@ class Courses
      *
      * @return Course[]
 	 
-	  [2] =>
+	 Example:   [2] =>
 	  Array
         (
             [Id] => jVAm87NAzjE1

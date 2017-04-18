@@ -160,9 +160,20 @@ class Service
         curl_close($ch);
 
         if (!in_array($http_status, array(200, 201))) {
-            throw new Exception\Request(
+			if($http_status==409){
+				//409	Conflict. Often occurs when trying to create an item that already exists
+				
+				return "<error><errmsg>Create failed. Already exists</errmsg></error>";
+				
+			}
+			else {
+			  throw new Exception\Request(
                 sprintf('Bad response received from Litmos! http status: %s url: %s', $http_status, $full_url)
-            );
+              );
+			}
+			
+				
+          
         }
 	
   

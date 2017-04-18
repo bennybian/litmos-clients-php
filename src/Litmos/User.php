@@ -136,7 +136,7 @@ class User
         $skype = null,
         $phone_work = null,
         $phone_mobile = null,
-        \DateTime $last_login = null,
+        // $last_login = null,
         $login_key = null,
         $skip_first_login = null
     ) {
@@ -163,7 +163,7 @@ class User
             $this->skype            = $skype;
             $this->phone_work       = $phone_work;
             $this->phone_mobile     = $phone_mobile;
-            $this->last_login       = $last_login;
+           // $this->last_login       = $last_login;
             $this->login_key        = $login_key;
             $this->skip_first_login = $skip_first_login;
             $this->courses          = new UserCourses($litmos_service, $this);
@@ -178,13 +178,27 @@ class User
         $this->is_custom_username = !$is_email;
     }
 
+	// Get User ID from response XML.
+	public static function GetUserIDFromXml(Service $service, $xml)
+    {
+        $xml = new \SimpleXMLElement($xml);
+
+        $id               = (string)$xml->Id;
+        if($id) {
+			return $id;
+			
+		}
+		else return 0;
+		return $user;
+    }
+	
     /**
      * @param Service $service
      * @param string  $xml
      *
      * @return User
      */
-    public static function FromXml(Service $service, $xml)
+    public static function FromXml(Service $service, $xml,$returnKey=NULL)
     {
         $xml = new \SimpleXMLElement($xml);
 
@@ -200,10 +214,14 @@ class User
         $skype            = (string)$xml->Skype;
         $phone_work       = (string)$xml->PhoneWork;
         $phone_mobile     = (string)$xml->PhoneMobile;
-        $last_login       = (string)$xml->LastLogin ? new \DateTime((string)$xml->LastLogin) : new \DateTime(-1);
+       // $last_login       = (string)$xml->LastLogin ? new \DateTime((string)$xml->LastLogin) : new \DateTime(-1);
         $login_key        = (string)$xml->LoginKey;
         $skip_first_login = filter_var((string)$xml->SkipFirstLogin, FILTER_VALIDATE_BOOLEAN);
-
+        if($returnKey){
+			  return $$returnKey;
+			
+		}
+		
         $user = new User(
             $service,
             $id,
@@ -218,11 +236,11 @@ class User
             $skype,
             $phone_work,
             $phone_mobile,
-            $last_login,
+           // $last_login,
             $login_key,
             $skip_first_login
         );
-
+       
         return $user;
     }
 
@@ -241,10 +259,10 @@ class User
             'AccessLevel'        => $this->access_level,
             'DisablesMessages'   => $this->disable_messages,
             'Active'             => $this->active,
-            'Skype'              => $this->skype,
-            'PhoneWork'          => $this->phone_work,
-            'PhoneMobile'        => $this->phone_mobile,
-            'LastLogin'          => $this->last_login->format(DATE_ISO8601),
+           // 'Skype'              => $this->skype,
+           // 'PhoneWork'          => $this->phone_work,
+           // 'PhoneMobile'        => $this->phone_mobile,
+            'LastLogin'          => '',
             'LoginKey'           => $this->login_key,
             'IsCustomerUsername' => $this->is_custom_username,
             'Password'           => $this->password ? $this->password : '',

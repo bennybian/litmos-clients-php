@@ -25,8 +25,19 @@ class Users
     public function getAll(PagingSearch $ps = null)
     {
         $response = $this->service->get('/users', $ps);
+		$xml         = new \SimpleXMLElement($response);
+		$users_nodes = $xml->children();
+		foreach ($users_nodes as $element) {
+		  $one=array();
+		  foreach($element as $key => $val) {
+		   $one[$key] =(string)$val;
+		  }
+		
+		   $users[]=$one;
+		}
+		
 
-        $xml         = new \SimpleXMLElement($response);
+       /* $xml         = new \SimpleXMLElement($response);
         $users_nodes = $xml->children();
 
         $users = array();
@@ -36,7 +47,7 @@ class Users
             echo $first_name = (string)$user_node->FirstName;
             $last_name  = (string)$user_node->LastName;
             $users[]    = new UserBasic($this->service, $id, $username, $first_name, $last_name);
-        }
+        }*/
 
         return $users;
     }
@@ -45,7 +56,7 @@ class Users
      * @param string|UserBasic $user_id
      * @return User
      */
-    public function get($user_id)
+    public function get($user_id,$returnKey=NULL)
     {
         if ($user_id instanceof UserBasic) {
             $user_id = $user_id->getUserId();
@@ -57,7 +68,7 @@ class Users
 
         $response = $this->service->get("/users/{$user_id}");
 
-        return User::FromXml($this->service, $response);
+        return User::FromXml($this->service, $response,$returnKey);
     }
 
     /**
@@ -80,8 +91,12 @@ class Users
         $skype = '',
         $phone_work = '',
         $phone_mobile = '',
-        $skip_first_login = false
+        $skip_first_login = true
     ) {
+		 
+		
+		
+			
         $user = new User(
             $this->service,
             '',
@@ -90,22 +105,26 @@ class Users
             $last_name,
             '',
             $email,
-            'Learner',
-            false,
-            true,
-            $skype,
+            'Learner', //  $access_level,
+            false,  // $disable_messages,
+            true,//$active,
+            $skype, 
             $phone_work,
             $phone_mobile,
-            new \DateTime(),
-            '',
-            $skip_first_login
+            // '', //$last_login new \DateTime()
+            '', 
+            $skip_first_login  //By default all new users that you create will be prompted to change their password the first time they login. If you are using the single sign-on approach then this may not be desirable. To stop this from happening you need to set the SkipFirstLogin field to true. 
         );
 
         $req_xml = $user->toXml();
+		var_dump( $req_xml);
+		//return;
 
         $rep_xml = $this->service->post('/users', $req_xml);
 
-        return User::FromXml($this->service, $rep_xml);
+		// Get User ID from response XML.
+	    return User::GetUserIDFromXml($this->service, $rep_xml);
+		
     }
 
     /**
