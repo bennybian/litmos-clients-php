@@ -112,4 +112,20 @@ class Courses
 
         return $courses;
     }
+	
+
+     //return all the coursesID of the user in array	
+	 public function getAllIDs()
+    {
+        $response = $this->service->get("/users/{$this->user_id}/courses");
+
+        $xml = new \SimpleXMLElement($response);
+
+        $courses      = array();
+        $course_nodes = $xml->children();
+        foreach ($course_nodes as $course_node) {
+           $courses[]     = (string)$course_node->Id;
+        }
+        return $courses;
+    }
 }

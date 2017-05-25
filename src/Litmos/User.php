@@ -186,10 +186,9 @@ class User
         $id               = (string)$xml->Id;
         if($id) {
 			return $id;
-			
 		}
 		else return 0;
-		return $user;
+		
     }
 	
     /**

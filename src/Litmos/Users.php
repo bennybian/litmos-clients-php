@@ -117,14 +117,13 @@ class Users
         );
 
         $req_xml = $user->toXml();
-		var_dump( $req_xml);
+		//var_dump( $req_xml);
 		//return;
 
         $rep_xml = $this->service->post('/users', $req_xml);
-
+        // var_dump($rep_xml);
 		// Get User ID from response XML.
 	    return User::GetUserIDFromXml($this->service, $rep_xml);
-		
     }
 
     /**

@@ -48,13 +48,19 @@ class Courses
     public function getAll(PagingSearch $ps = null)
     {
         $response = $this->service->get('/courses', $ps);
-       //var_dump($response);
+       // var_dump($response);
         $xml = new \SimpleXMLElement($response);
 		
 		$course_nodes = $xml->children();
 		foreach ($course_nodes as $element) {
 		  $oneCourse=array();
 		  foreach($element as $key => $val) {
+			  if($key=="Active"){
+				  // convert active value from true/false to 1/0
+				   $val = filter_var((string)$val, FILTER_VALIDATE_BOOLEAN);
+			   }
+			  
+			  
 		   $oneCourse[$key] =(string)$val;
 		  }
 		
