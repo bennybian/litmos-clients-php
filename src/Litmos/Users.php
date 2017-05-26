@@ -53,6 +53,7 @@ class Users
     }
 
     /**
+	Get user info by Id
      * @param string|UserBasic $user_id
      * @return User
      */
@@ -68,8 +69,17 @@ class Users
 
         $response = $this->service->get("/users/{$user_id}");
 
-        return User::FromXml($this->service, $response,$returnKey);
+        return User::FromXml( $response,$returnKey);
     }
+	
+	// Get UserID by Email (username)
+	public function getUserIDbyEmail($userEmail)
+    {
+       	 $ps=new \Litmos\PagingSearch(0,1,1,"ASC",$userEmail);
+		 $response = $this->service->get('/users', $ps);
+		 return User::FromXml( $response,"id");
+    }
+	
 
     /**
      * @param string $user_name
@@ -123,7 +133,7 @@ class Users
         $rep_xml = $this->service->post('/users', $req_xml);
         // var_dump($rep_xml);
 		// Get User ID from response XML.
-	    return User::GetUserIDFromXml($this->service, $rep_xml);
+	    return User::FromXml( $rep_xml,"id");
     }
 
     /**
@@ -132,7 +142,7 @@ class Users
     public function update(User $user)
     {
         $xml = $user->toXml();
-
+      
         $this->service->put("/users/{$user->getUserId()}", $xml);
     }
 }

@@ -178,18 +178,7 @@ class User
         $this->is_custom_username = !$is_email;
     }
 
-	// Get User ID from response XML.
-	public static function GetUserIDFromXml(Service $service, $xml)
-    {
-        $xml = new \SimpleXMLElement($xml);
-
-        $id               = (string)$xml->Id;
-        if($id) {
-			return $id;
-		}
-		else return 0;
-		
-    }
+	
 	
     /**
      * @param Service $service
@@ -197,48 +186,33 @@ class User
      *
      * @return User
      */
-    public static function FromXml(Service $service, $xml,$returnKey=NULL)
+    public static function FromXml($xml,$returnKey=NULL)
     {
         $xml = new \SimpleXMLElement($xml);
-
-        $id               = (string)$xml->Id;
-        $username         = (string)$xml->UserName;
-        $first_name       = (string)$xml->FirstName;
-        $last_name        = (string)$xml->LastName;
-        $full_name        = (string)$xml->FullName;
-        $email            = (string)$xml->Email;
-        $access_level     = (string)$xml->AccessLevel;
-        $disable_messages = filter_var((string)$xml->DisableMessages, FILTER_VALIDATE_BOOLEAN);
-        $active           = filter_var((string)$xml->Active, FILTER_VALIDATE_BOOLEAN);
-        $skype            = (string)$xml->Skype;
-        $phone_work       = (string)$xml->PhoneWork;
-        $phone_mobile     = (string)$xml->PhoneMobile;
+		if($xml->User){
+			$xml=$xml->User;
+		}
+        $user["id"]               = (string)$xml->Id;
+        $user["username"]           = (string)$xml->UserName;
+        $user["first_name"]        = (string)$xml->FirstName;
+        $user["last_name"]         = (string)$xml->LastName;
+        $user["full_name"]          = (string)$xml->FullName;
+        $user["email"]              = (string)$xml->Email;
+        $user["access_level"]       = (string)$xml->AccessLevel;
+       // $disable_messages = filter_var((string)$xml->DisableMessages, FILTER_VALIDATE_BOOLEAN);
+        $user["active"]       = filter_var((string)$xml->Active, FILTER_VALIDATE_BOOLEAN);
+       // $skype            = (string)$xml->Skype;
+       // $phone_work       = (string)$xml->PhoneWork;
+       // $phone_mobile     = (string)$xml->PhoneMobile;
        // $last_login       = (string)$xml->LastLogin ? new \DateTime((string)$xml->LastLogin) : new \DateTime(-1);
-        $login_key        = (string)$xml->LoginKey;
-        $skip_first_login = filter_var((string)$xml->SkipFirstLogin, FILTER_VALIDATE_BOOLEAN);
+        $user["login_key"]          = (string)$xml->LoginKey;
+        //$skip_first_login = filter_var((string)$xml->SkipFirstLogin, FILTER_VALIDATE_BOOLEAN);
         if($returnKey){
-			  return $$returnKey;
+			  return $user[$returnKey];
 			
 		}
 		
-        $user = new User(
-            $service,
-            $id,
-            $username,
-            $first_name,
-            $last_name,
-            $full_name,
-            $email,
-            $access_level,
-            $disable_messages,
-            $active,
-            $skype,
-            $phone_work,
-            $phone_mobile,
-           // $last_login,
-            $login_key,
-            $skip_first_login
-        );
+       
        
         return $user;
     }

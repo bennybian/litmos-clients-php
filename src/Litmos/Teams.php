@@ -64,7 +64,7 @@ class Teams
 
         $response = $this->service->get("/teams/{$team_id}");
 
-        return Team::FromXml($this->service, $response);
+        return Team::FromXml( $response);
     }
 
     /**
@@ -80,7 +80,7 @@ class Teams
 
         $rep_xml = $this->service->post('/teams', $req_xml);
 
-        return Team::FromXml($this->service, $rep_xml);
+        return Team::FromXml( $rep_xml);
     }
 
     /**
